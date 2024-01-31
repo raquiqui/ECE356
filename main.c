@@ -122,6 +122,7 @@ int server(uint16_t port)
 	int len;
 
 	//specify address of this server
+	bzero((char *)&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET; //specifies that address family is IPv4 
 	server_addr.sin_addr.s_addr = htons(INADDR_ANY); //accepts connections from ANY IP ADDRESS
 	server_addr.sin_port = htons(port); //converts provided port # (port) to network byte order and sets in server_addr struct
@@ -137,13 +138,13 @@ int server(uint16_t port)
 	printf("Socket created\n");
 
 	//use bind function to bind socket to ip address
-	if (bind(sock,(const struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
+	if (bind(sock, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
 		perror("bind error:");
 		return 1;
 	}
 
 	//listen for client -defines how many connections can be pending on a specified socket
-	listen(sock, 5);
+	listen(sock, MAX_BACK_LOG);
 
 	//&server_addr gives address of server
 	while(1){
