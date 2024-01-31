@@ -118,6 +118,7 @@ int server(uint16_t port)
 {	int sock; //stores socket descripter 
 	int new_sock;
 	char buff[MAX_MSG_LENGTH]; 
+	int addr_len;
 	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
 	size_t client_addr_len = sizeof(client_addr);
 
@@ -154,7 +155,7 @@ int server(uint16_t port)
 			perror("accept error:");
 			exit(1);
 		}
-		while((int addr_len = recv(new_sock, buff, sizeof(buff), 0)) > 0){
+		while((addr_len = recv(new_sock, *buff, buff, 0)) > 0){
 			int send(sock, buff, sizeof(buff), 0) //flags default=0
 		}
 		close(new_sock);
