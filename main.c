@@ -117,7 +117,6 @@ int client(const char * addr, uint16_t port)
 int server(uint16_t port)
 {	int sock; //stores socket descripter 
 	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
-	socklen_t client_addr_len = sizeof(client_addr); //declares length of client addr struct
 
 	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
@@ -136,15 +135,6 @@ int server(uint16_t port)
 	//must first assign sockel local ip/port number, cant just open/read/write data to socket 
 	//must connect other end of socket to a remote machine w bind and connect
 	printf("Socket created\n");
-	
-	/*allow program to run again even if old connections in TIME_WAIT -> need to avoid seeing "address already
-	in use" errors when killing and restarting daemon frequently*/
-	int n = 1;
-	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&n, sizeof(n)) < 0){
-		perror("SO_REUSEADDR");
-		close(sock);
-		return -1;
-	}
 
 	//use bind function to bind socket to ip address
 	if (bind(int sock, struct sockaddr *address, int addr_len) < 0) { //if fails, use perror and return 1 
@@ -153,36 +143,18 @@ int server(uint16_t port)
 	}
 
 	//listen for client -defines how many connections can be pending on a specified socket
-	if (listen(int sock, int backlog) < 0) { //if fails, use perror and return 1 
-		perror("listen error:");
-		return 1;
+	listen(int sock, int backlog);
+
+	while(1){
+		if(new_sock= accept(int sock, struct sockaddr *address, int *addr_len) < 0){
+			perror("accept error:");
+			exit(1);
+		}
+		while((addr_len = recv(new_sock, buff, sizeof(buff), 0)) > 0){
+			int send(int sock, buff, sizeof(buff), 0) //flags default=0
+		}
+		close(new_sock);
 	}
-
-	//print that server is listening on the specified port
-	printf("server listening on port %d...\n", port);
-
-	//invokes int accept (accepts connection)
-	if (accept(int sock, struct sockaddr *address, int *addr_len) < 0) { //if fails, use perror and return 1 
-		perror("accept error:");
-		return 1;
-	}
-	/*blocking operation
-	-doesnt return until a remote participant has established a connection 
-	-when it does, returns a new socket that correponds to the new estalished connection and 
-	address argument contains remote participant address*/
-
-	//invokes int connect(int socket, struct sockaddr *address, int addr_len)
-	if (connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
-		perror("Connect error:");
-		return 1;
-	}
-
-
-	int send(int sock, char *msg, int msg_len, int flags) //flags default=0
-
-	int recv(int sock, char *buff, int buff_len, int flags) //flags default=0
-
-	return sock;
 }
 
 
