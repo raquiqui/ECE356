@@ -139,7 +139,7 @@ int server(uint16_t port)
 	printf("Socket created\n");
 
 	//use bind function to bind socket to ip address
-	if (bind(sock, sockaddr_in* server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
+	if (bind(sock,(const struct sockaddr_in*) &server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
 		perror("bind error:");
 		return 1;
 	}
@@ -147,8 +147,9 @@ int server(uint16_t port)
 	//listen for client -defines how many connections can be pending on a specified socket
 	listen(sock, 5);
 
+	//&server_addr gives address of server
 	while(1){
-		if(new_sock = accept(sock, sockaddr_in *server_addr, *sizeof(server_addr)) < 0){
+		if(new_sock = accept(sock,(const struct sockaddr_in*) &server_addr, *sizeof(server_addr)) < 0){
 			perror("accept error:");
 			exit(1);
 		}
