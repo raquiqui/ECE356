@@ -122,9 +122,8 @@ int server(uint16_t port)
 	int len;
 
 	//specify address of this server
-	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET; //specifies that address family is IPv4 
-	server_addr.sin_addr.s_addr = htonl(INADDR_ANY); //accepts connections from ANY IP ADDRESS
+	server_addr.sin_addr.s_addr = htons(INADDR_ANY); //accepts connections from ANY IP ADDRESS
 	server_addr.sin_port = htons(port); //converts provided port # (port) to network byte order and sets in server_addr struct
 
 	//creates TCP socket using socket fxn -> returns error message if fails (i.e. socket <0)
@@ -148,7 +147,7 @@ int server(uint16_t port)
 
 	//&server_addr gives address of server
 	while(1){
-		if(new_sock = accept(sock, (struct sockaddr *) &server_addr, &len) < 0){
+		if(new_sock = accept(sock, (struct sockaddr *)&server_addr, &len) < 0){
 			perror("accept error:");
 			exit(1);
 		}
@@ -157,6 +156,7 @@ int server(uint16_t port)
 		}
 		close(new_sock);
 	}
+	return 0;
 }
 
 
