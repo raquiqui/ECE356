@@ -118,7 +118,7 @@ int server(uint16_t port)
 {	int sock; //stores socket descripter 
 	int new_sock;
 	char buff[MAX_MSG_LENGTH]; 
-	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
+	struct sockaddr server_addr, client_addr; //declares server/client socket address structs
 
 	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
