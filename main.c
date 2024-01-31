@@ -140,12 +140,12 @@ int server(uint16_t port)
 	/*allow program to run again even if old connections in TIME_WAIT -> need to avoid seeing "address already
 	in use" errors when killing and restarting daemon frequently*/
 	int n = 1;
-	if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char*)&n, sizeof(n)) < 0){
+	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&n, sizeof(n)) < 0){
 		perror("SO_REUSEADDR");
 		close(sock);
 		return -1;
 	}
-	fcntl(s, F_SETFD, 1); 
+	fcntl(sock, F_SETFD, 1); 
 
 	//use bind function to bind socket to ip address
 	if (bind(int sock, struct sockaddr *address, int addr_len) < 0) { //if fails, use perror and return 1 
