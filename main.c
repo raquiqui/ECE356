@@ -137,18 +137,21 @@ int server(uint16_t port)
 	printf("Socket created\n");
 
 	//use bind function to bind socket to ip address
-	bind(int sock, struct sockaddr *address, int addr_len) //if fails, use perror and return 1 
+	if (bind(sock, sockaddr *address, addr_len) < 0) { //if fails, use perror and return 1 
+		perror("bind error:");
+		return 1;
+	}
 
 	//listen for client -defines how many connections can be pending on a specified socket
-	listen(int sock, int backlog);
+	listen(sock, backlog);
 
 	while(1){
-		if(new_sock= accept(int sock, struct sockaddr *address, int *addr_len) < 0){
+		if(new_sock= accept(sock, sockaddr *address, *addr_len) < 0){
 			perror("accept error:");
 			exit(1);
 		}
 		while((addr_len = recv(new_sock, buff, sizeof(buff), 0)) > 0){
-			int send(int sock, buff, sizeof(buff), 0) //flags default=0
+			int send(sock, buff, sizeof(buff), 0) //flags default=0
 		}
 		close(new_sock);
 	}
