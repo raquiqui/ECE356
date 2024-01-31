@@ -52,7 +52,7 @@ int client(const char * addr, uint16_t port)
 	int sock; //stores socket descriptor
 	struct sockaddr_in server_addr;  //declares a structure
 	//declares char arrays to store message to be sent and the server reply
-	char buff[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH];  
+	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH];  
 
 	//creates TCP socket using socket fxn -> returns error message if fails (i.e. socket <0)
 	if ((sock = socket(AF_INET, SOCK_STREAM/* use tcp */, 0)) < 0) { //SOCK_STREAM = reliable stream (for ip is TCP), when 3rd arg=0, OS decides
@@ -120,7 +120,7 @@ int server(uint16_t port)
 	char *buff; 
 	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
 
-	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
+	char buff[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
 	//specify address of this server
 	memset(&server_addr, 0, sizeof(server_addr));
