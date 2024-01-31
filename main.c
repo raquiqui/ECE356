@@ -116,6 +116,8 @@ int client(const char * addr, uint16_t port)
 /*Server implementation here*/
 int server(uint16_t port)
 {	int sock; //stores socket descripter 
+	int new_sock;
+	char *buff; 
 	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
 
 	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
@@ -143,7 +145,7 @@ int server(uint16_t port)
 	}
 
 	//listen for client -defines how many connections can be pending on a specified socket
-	listen(sock, backlog);
+	listen(sock, 5);
 
 	while(1){
 		if(new_sock = accept(sock, sockaddr_in *server_addr, *sizeof(server_addr)) < 0){
