@@ -119,6 +119,7 @@ int server(uint16_t port)
 	int new_sock;
 	char buff[MAX_MSG_LENGTH]; 
 	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
+	size_t client_addr_len = sizeof(client_addr);
 
 	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
@@ -139,7 +140,7 @@ int server(uint16_t port)
 	printf("Socket created\n");
 
 	//use bind function to bind socket to ip address
-	if (bind(sock,(const struct sockaddr_in*) &server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
+	if (bind(sock,(const struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
 		perror("bind error:");
 		return 1;
 	}
@@ -149,7 +150,7 @@ int server(uint16_t port)
 
 	//&server_addr gives address of server
 	while(1){
-		if(new_sock = accept(sock,(const struct sockaddr_in*) &server_addr, sizeof(server_addr)) < 0){
+		if(new_sock = accept(sock,(const struct sockaddr *) &client_addr, (socklen_t *)&client_addr_len) < 0){
 			perror("accept error:");
 			exit(1);
 		}
