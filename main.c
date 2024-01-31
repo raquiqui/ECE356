@@ -116,27 +116,16 @@ int client(const char * addr, uint16_t port)
 /*Server implementation here*/
 int server(uint16_t port)
 {	int sock; //stores socket descripter 
-	struct sockaddr_in server_addr; //declares a struct -WHAT DOES THIS MEAN
-
-	//structs??
-	struct in_addr { //addr must be of structure sockaddr_in
-		u_int_t s_addr
-	}
-	struct sockaddr_in {
-		short sin_family;
-		u_short sin_port;
-		struct in_addr sin_addr;
-		char sin_zero[8]; 
-	}
+	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
+	socklen_t client_addr_len = sizeof(client_addr); //declares length of client addr struct
 
 	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
 	//specify address of this server
+	memset(&server_address, 0, sizeof(server_address));
 	server_addr.sin_family = AF_INET; //specifies that address family is IPv4 
 	server_addr.sin_addr.s_addr = htonl(INADDR_ANY); //accepts connections from ANY IP ADDRESS
 	server_addr.sin_port = htons(port); //converts provided port # (port) to network byte order and sets in server_addr struct
-
-
 
 	//creates TCP socket using socket fxn -> returns error message if fails (i.e. socket <0)
 	if ((sock = socket(AF_INET, SOCK_STREAM/* use tcp */, 0)) < 0) { //SOCK_STREAM = reliable stream (for ip is TCP), when 3rd arg=0, OS decides
@@ -148,7 +137,6 @@ int server(uint16_t port)
 	//must connect other end of socket to a remote machine w bind and connect
 	printf("Socket created\n");
 	
-
 	/*allow program to run again even if old connections in TIME_WAIT -> need to avoid seeing "address already
 	in use" errors when killing and restarting daemon frequently*/
 	int n = 1;
@@ -170,6 +158,9 @@ int server(uint16_t port)
 		perror("listen error:");
 		return 1;
 	}
+
+	//print that server is listening on the specified port
+	printf("server listening on port %d...\n", port);
 
 	//invokes int accept (accepts connection)
 	if (accept(int sock, struct sockaddr *address, int *addr_len) < 0) { //if fails, use perror and return 1 
