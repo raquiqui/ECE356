@@ -150,7 +150,7 @@ int server(uint16_t port)
 
 	//&server_addr gives address of server
 	while(1){
-		if(new_sock = accept(sock,(const struct sockaddr *) &client_addr, (socklen_t *)&client_addr_len) < 0){
+		if(new_sock = accept(sock,(struct sockaddr *) &client_addr, (socklen_t *)&client_addr_len) < 0){
 			perror("accept error:");
 			exit(1);
 		}
