@@ -152,7 +152,7 @@ int server(uint16_t port)
 			perror("accept error:");
 			exit(1);
 		}
-		while((int addr_len = recv(new_sock, buff, sizeof(buff), 0)) > 0){
+		while((len = recv(new_sock, buff, sizeof(buff), 0)) > 0){
 			int send(sock, buff, sizeof(buff), 0) //flags default=0
 		}
 		close(new_sock);
