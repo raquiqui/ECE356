@@ -139,7 +139,7 @@ int server(uint16_t port)
 	printf("Socket created\n");
 
 	//use bind function to bind socket to ip address
-	if (bind(sock, (sockaddr_in*)server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
+	if (bind(sock, sockaddr_in* server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
 		perror("bind error:");
 		return 1;
 	}
