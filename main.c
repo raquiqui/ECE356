@@ -117,11 +117,9 @@ int client(const char * addr, uint16_t port)
 int server(uint16_t port)
 {	int sock; //stores socket descripter 
 	int new_sock;
-	char buff[MAX_LINE]; 
+	char buff[MAX_MSG_LENGTH]; 
 	struct sockaddr_in server_addr, client_addr; //declares server/client socket address structs
 	size_t client_addr_len = sizeof(client_addr);
-
-	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
 	//specify address of this server
 	memset(&server_addr, 0, sizeof(server_addr));
