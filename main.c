@@ -93,14 +93,14 @@ int server(uint16_t port)
 {	int sock; //stores socket descripter 
 	int new_sock;
 	char buff[MAX_MSG_LENGTH]; 
-	struct sockaddr_in server_addr; //declares server/client socket address structs
+	struct sockaddr_in sin; //declares server/client socket address structs
 	int len;
 
 	//specify address of this server
-	bzero((char *)&server_addr, sizeof(server_addr));
-	server_addr.sin_family = AF_INET; //specifies that address family is IPv4 
-	server_addr.sin_addr.s_addr = htons(INADDR_ANY); //accepts connections from ANY IP ADDRESS
-	server_addr.sin_port = htons(port); //converts provided port # (port) to network byte order and sets in server_addr struct
+	bzero((char *)&sin, sizeof(sin));
+	sin.sin_family = AF_INET; //specifies that address family is IPv4 
+	sin.sin_addr.s_addr = htons(INADDR_ANY); //accepts connections from ANY IP ADDRESS
+	sin.sin_port = htons(port); //converts provided port # (port) to network byte order and sets in server_addr struct
 
 	//creates TCP socket using socket fxn -> returns error message if fails (i.e. socket <0)
 	if ((sock = socket(AF_INET, SOCK_STREAM/* use tcp */, 0)) < 0) { //SOCK_STREAM = reliable stream (for ip is TCP), when 3rd arg=0, OS decides
@@ -113,7 +113,7 @@ int server(uint16_t port)
 	printf("Socket created\n");
 
 	//use bind function to bind socket to ip address
-	if (bind(sock, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) { //if fails, use perror and return 1 
+	if (bind(sock, (const struct sockaddr *)&sin, sizeof(sin)) < 0) { //if fails, use perror and return 1 
 		perror("bind error:");
 		return 1;
 	}
@@ -123,7 +123,7 @@ int server(uint16_t port)
 
 	//&server_addr gives address of server
 	while(1){
-		if(new_sock = accept(sock, (struct sockaddr *)&server_addr, &len) < 0){
+		if(new_sock = accept(sock, (struct sockaddr *)&sin, &len) < 0){
 			perror("accept error:");
 			exit(1);
 		}
