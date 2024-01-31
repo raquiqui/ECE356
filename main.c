@@ -122,7 +122,7 @@ int server(uint16_t port)
 	char msg[MAX_MSG_LENGTH], reply[MAX_MSG_LENGTH]; //declares char arrays to store message to be sent and the server reply
 
 	//specify address of this server
-	memset(&server_address, 0, sizeof(server_address));
+	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET; //specifies that address family is IPv4 
 	server_addr.sin_addr.s_addr = htonl(INADDR_ANY); //accepts connections from ANY IP ADDRESS
 	server_addr.sin_port = htons(port); //converts provided port # (port) to network byte order and sets in server_addr struct
@@ -145,7 +145,6 @@ int server(uint16_t port)
 		close(sock);
 		return -1;
 	}
-	fcntl(sock, F_SETFD, 1); 
 
 	//use bind function to bind socket to ip address
 	if (bind(int sock, struct sockaddr *address, int addr_len) < 0) { //if fails, use perror and return 1 
@@ -186,46 +185,5 @@ int server(uint16_t port)
 	return sock;
 }
 
-/*read line of input from file descriptor and return it*/
-static char* 
-readline(int sock){
-	char *buf = NULL, *nbuf;
-	int buf_pos=0, buf_len=0;
-	int i, n;
 
-	for(;;){
-		//ensure there is room in buffer
-		if(buf_pos == buf_len){
-			buf_len = buf_len ? buf_len <<1 :4;
-			nbuf = realloc(buf, buf_len);
-
-			if(!nbuf){
-				free(buf);
-				return NULL;
-			}
-			buf = nbuf;
-		}
-
-		//read some data into buffer
-		n = read(s, buf + buf_pos, buf_len - buf_pos);
-		if (n <= 0){
-			if(n<0)
-				perror("read");
-			else
-				fprintf(stderr, "read:EOF\n");
-			free(buf);
-			return NULL;
-		}
-
-		/*look for end of a line and return if we got it. be generous in what is considered end of line*/
-		for(i=buf_pos; i<buf_pos+n; i++){
-			if(buf[i] == '\0' || buf[i] == '\r' || buf[i]=='\n'){
-				buf[i]='\0';
-				return buf;
-			}
-			buf_pos += n;
-		}
-
-	}
-}
 
